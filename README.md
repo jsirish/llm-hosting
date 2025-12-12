@@ -314,7 +314,7 @@ This is a personal project for self-hosted LLM inference. Feel free to use as re
 
 ```
 
-**Last Updated**: December 12, 2025  
+**Last Updated**: December 12, 2025
 
 **Current Pod**: petite_coffee_koi-migration (3clxt008hl0a3a)  ## 🔗 Useful Links
 

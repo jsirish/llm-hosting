@@ -74,7 +74,7 @@ Ports: 8000 (TCP) - expose for API access
 
 ### 1.4 Deploy Pod2. Same as Option A
 
-- Click **Deploy** 
+- Click **Deploy**
 
 - Wait 2-3 minutes for pod to start---
 
@@ -558,6 +558,6 @@ curl http://localhost:8000/v1/models
 
 ---
 
-**Last Updated**: December 12, 2025  
-**Current Status**: ✅ All systems operational  
+**Last Updated**: December 12, 2025
+**Current Status**: ✅ All systems operational
 **Questions?** Check docs/ or review logs
