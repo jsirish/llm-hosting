@@ -1,0 +1,28 @@
+#!/bin/bash
+# Setup HuggingFace Token for Gated Models
+# Run this on RunPod to authenticate with HuggingFace
+
+echo "🔐 HuggingFace Authentication Setup"
+echo "===================================="
+echo ""
+echo "📝 Steps to get your token:"
+echo "1. Go to: https://huggingface.co/settings/tokens"
+echo "2. Create a new token (or copy existing one)"
+echo "3. Accept model access at: https://huggingface.co/google/gemma-3-27b-it"
+echo ""
+echo "Then run ONE of these commands:"
+echo ""
+echo "Option 1 - Interactive login:"
+echo "  huggingface-cli login"
+echo ""
+echo "Option 2 - Direct token (replace YOUR_TOKEN):"
+echo "  export HF_TOKEN='hf_YOUR_TOKEN_HERE'"
+echo "  huggingface-cli login --token \$HF_TOKEN"
+echo ""
+echo "Option 3 - Persist token to file:"
+echo "  echo 'hf_YOUR_TOKEN_HERE' > /workspace/hf-token.txt"
+echo "  export HF_TOKEN=\$(cat /workspace/hf-token.txt)"
+echo "  huggingface-cli login --token \$HF_TOKEN"
+echo ""
+echo "💡 The token will be saved to ~/.cache/huggingface/token"
+echo "   and persist across pod restarts in /workspace"

@@ -1,0 +1,59 @@
+# Logs
+*.log
+logs/
+*.pid
+
+# API Keys and Secrets
+*api-key*.txt
+*.key
+.env
+.env.*
+
+# Cache and temporary files
+*.pyc
+__pycache__/
+.cache/
+*.tmp
+*.swp
+*~
+
+# Model files (large)
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+*.pth
+
+# HuggingFace cache (stored in /workspace/hf-cache on RunPod)
+hf-cache/
+.cache/huggingface/
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+
+# Continue.dev (user-specific config)
+.continue/config.yaml
+
+# Python virtual environments
+venv/
+env/
+ENV/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# Test outputs
+test_output/
+outputs/
+
+# Personal notes (not in docs/)
+NOTES.md
+TODO.md
+PERSONAL*.md

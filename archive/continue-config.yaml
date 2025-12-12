@@ -1,0 +1,78 @@
+# Continue.dev Configuration for RunPod vLLM Setup
+# Copy this to: ~/.continue/config.yaml
+
+models:
+  - title: GPT-OSS 20B (Chat)
+    provider: vllm
+    model: openai/gpt-oss-20b
+    apiBase: https://3clxt008hl0a3a-8000.proxy.runpod.net/v1
+    apiKey: sk-vllm-41d3575b25edb67c4a428859379be0a3
+    roles:
+      - chat
+      - edit
+      - apply
+    contextLength: 131072  # 128K tokens
+    template: llama3
+    promptTemplates:
+      edit: |
+        You are an expert programmer. Edit the following code according to the user's request.
+
+        Code to edit:
+        ```{{{language}}}
+        {{{codeToEdit}}}
+        ```
+
+        User request: {{{userInput}}}
+
+        Provide only the complete updated code, no explanations.
+
+tabAutocompleteOptions:
+  # Using default models (Continue.dev will use free tab-autocomplete service)
+  # For local autocomplete, you'd need a second GPU or smaller model
+  disable: false
+  useCopyBuffer: false
+  maxPromptTokens: 400       # Smaller context for speed
+  debounceDelay: 300         # Wait 300ms after typing stops
+  disableInFiles:
+    - "*.md"                 # Disable in markdown
+    - "*.txt"                # Disable in text files
+
+# Optional: Customize context providers
+contextProviders:
+  - name: code
+    params:
+      maxTokens: 10000
+  - name: docs
+    params: {}
+  - name: diff
+    params: {}
+  - name: terminal
+    params: {}
+  - name: problems
+    params: {}
+  - name: folder
+    params: {}
+  - name: codebase
+    params: {}
+
+# Optional: Customize slash commands
+slashCommands:
+  - name: edit
+    description: "Edit highlighted code"
+  - name: comment
+    description: "Write comments for highlighted code"
+  - name: share
+    description: "Export this session to markdown"
+  - name: cmd
+    description: "Generate a shell command"
+
+# Optional: UI preferences
+ui:
+  fontSize: 14
+  showChatScrollbar: true
+
+# Optional: Telemetry (set to false for privacy)
+allowAnonymousTelemetry: false
+
+# Optional: Model verification on startup
+verifyModelsOnStartup: true
