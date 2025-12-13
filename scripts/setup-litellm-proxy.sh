@@ -11,7 +11,7 @@ echo "📝 Creating LiteLLM config..."
 cat > /workspace/litellm-config.yaml << 'EOF'
 model_list:
   # Qwen 3 Coder 30B - Primary model for tool calling
-  # vLLM uses mistral parser, LiteLLM normalizes to OpenAI format
+  # vLLM uses qwen3_coder parser, LiteLLM normalizes to OpenAI format
   - model_name: qwen3-coder-30b
     litellm_params:
       model: Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8
@@ -20,6 +20,7 @@ model_list:
       supports_function_calling: true
       supports_parallel_function_calling: true
       custom_llm_provider: openai
+      stream: false  # Force non-streaming to avoid qwen3_coder bug
     model_info:
       mode: chat
       supports_function_calling: true
