@@ -11,19 +11,19 @@ echo "📝 Creating LiteLLM config..."
 cat > /workspace/litellm-config.yaml << 'EOF'
 model_list:
   # Qwen 3 Coder 30B - Primary model for tool calling
-  # vLLM uses qwen3_coder parser, LiteLLM normalizes to OpenAI format
+  # vLLM outputs raw text, LiteLLM does NOT parse tools (Continue.dev handles it)
   - model_name: qwen3-coder-30b
     litellm_params:
       model: Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8
       api_base: http://localhost:8000/v1
       api_key: sk-vllm-c9be6c31b9f1ebd5bc5a316ac7d71381
-      supports_function_calling: true
-      supports_parallel_function_calling: true
+      supports_function_calling: false
+      supports_parallel_function_calling: false
       custom_llm_provider: openai
     model_info:
       mode: chat
-      supports_function_calling: true
-      supports_parallel_function_calling: true
+      supports_function_calling: false
+      supports_parallel_function_calling: false
       max_tokens: 8192  # Max completion tokens
       max_input_tokens: 131072  # 128K context
 
@@ -32,7 +32,8 @@ litellm_settings:
   json_logs: false  # Easier to read logs
   num_retries: 0  # Disable retries that might cause issues
   request_timeout: 600
-  modify_params: true
+  success_callback: []  # Disable success callbacks
+  failure_callback: []  # Disable failure callbacks
 
 general_settings:
   master_key: sk-litellm-c9be6c31b9f1ebd5bc5a316ac7d71381  # Same key for simplicity
