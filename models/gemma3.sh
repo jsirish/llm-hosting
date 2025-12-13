@@ -12,7 +12,7 @@ export VLLM_MODEL_DESCRIPTION="Gemma 3 27B Instruct (FP8 Quantized)"
 export VLLM_SERVED_MODEL_NAME="google/gemma-3-27b-it"  # Serve under original name
 export VLLM_MAX_MODEL_LEN=131072     # 128K tokens (FP8 saves ~50% memory!)
 export VLLM_GPU_MEMORY_UTIL=0.95     # Maximum GPU memory utilization
-export VLLM_TOOL_PARSER="openai"
+export VLLM_TOOL_PARSER="hermes"     # Hermes parser works with many instruction models
 export VLLM_QUANTIZATION=""          # Auto-detected from model
 
 # Performance optimizations
