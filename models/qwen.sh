@@ -12,7 +12,7 @@ export VLLM_MODEL_DESCRIPTION="Qwen 3 Coder 30B Instruct (FP8 Quantized)"
 export VLLM_SERVED_MODEL_NAME="Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"
 export VLLM_MAX_MODEL_LEN=131072     # 128K tokens
 export VLLM_GPU_MEMORY_UTIL=0.95     # Maximum GPU memory utilization
-export VLLM_TOOL_PARSER="mistral"    # Use Mistral parser - simpler, more stable
+export VLLM_TOOL_PARSER="qwen3_coder" # Use qwen3_coder, disable streaming in LiteLLM
 export VLLM_QUANTIZATION=""          # Auto-detected from model
 
 # Performance optimizations

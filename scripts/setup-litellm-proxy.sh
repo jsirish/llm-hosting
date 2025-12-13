@@ -34,6 +34,7 @@ litellm_settings:
   request_timeout: 600
   success_callback: []  # Disable success callbacks
   failure_callback: []  # Disable failure callbacks
+  force_stream_off: true  # Force non-streaming to avoid vLLM bug
 
 general_settings:
   master_key: sk-litellm-c9be6c31b9f1ebd5bc5a316ac7d71381  # Same key for simplicity
