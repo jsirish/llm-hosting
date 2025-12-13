@@ -1,21 +1,15 @@
 #!/bin/bash
-# Update RunPod configuration for LiteLLM + vLLM tool calling
+# Update RunPod configuration for Gemma3-27B with native tool calling
 # Run this script ON the RunPod instance
 
 set -e
 
-echo "🔄 Updating RunPod configuration for LiteLLM + vLLM tool calling"
-echo "=================================================================="
+echo "🔄 Deploying Gemma3-27B with native tool calling support"
+echo "=========================================================="
 echo ""
 
-# Step 1: Recreate LiteLLM config
-echo "1️⃣ Updating LiteLLM configuration..."
-./scripts/setup-litellm-proxy.sh
-
-# Step 2: Restart vLLM with qwen3_coder parser
-echo ""
-echo "2️⃣ Restarting vLLM server with qwen3_coder parser..."
-echo "   Stopping current vLLM server..."
+# Step 1: Restart vLLM with Gemma3-27B (openai parser for tool calling)
+echo "1️⃣ Stopping current vLLM server..."
 
 # Try to use the stop script if it exists, otherwise use pkill
 if [ -f "./scripts/stop-server.sh" ]; then
@@ -26,12 +20,14 @@ else
 fi
 sleep 3
 
-echo "   Starting vLLM with qwen3_coder parser..."
-./models/qwen.sh
+echo ""
+echo "2️⃣ Starting Gemma3-27B with native OpenAI tool calling..."
+./models/gemma3.sh
 echo "   ✅ vLLM restart initiated"
 
 # Wait for vLLM to be ready
-echo "   Waiting for vLLM to initialize..."
+echo ""
+echo "3️⃣ Waiting for vLLM to initialize..."
 for i in {1..60}; do
     if curl -s http://localhost:8000/health > /dev/null 2>&1; then
         echo "   ✅ vLLM is ready!"
@@ -42,51 +38,21 @@ for i in {1..60}; do
 done
 echo ""
 
-# Step 3: Restart LiteLLM proxy
+# Step 2: Verify configuration
 echo ""
-echo "3️⃣ Restarting LiteLLM proxy..."
-if [ -f /workspace/logs/litellm-proxy.pid ]; then
-    OLD_PID=$(cat /workspace/logs/litellm-proxy.pid)
-    echo "   Stopping old LiteLLM (PID: $OLD_PID)..."
-    kill $OLD_PID 2>/dev/null || echo "   Process not found"
-    sleep 2
-fi
-
-echo "   Starting LiteLLM proxy..."
-./scripts/start-litellm-proxy.sh
-
-# Wait for LiteLLM to be ready
-echo "   Waiting for LiteLLM to initialize..."
-for i in {1..30}; do
-    if curl -s http://localhost:4000/ > /dev/null 2>&1; then
-        echo "   ✅ LiteLLM is ready!"
-        break
-    fi
-    echo -n "."
-    sleep 1
-done
+echo "4️⃣ Verifying Gemma3-27B configuration..."
 echo ""
 
-# Step 4: Verify configuration
-echo ""
-echo "4️⃣ Verifying configuration..."
-echo ""
-
-echo "   Testing vLLM (port 8000)..."
+echo "   Testing vLLM endpoint..."
 curl -s http://localhost:8000/v1/models | jq -r '.data[].id' || echo "   ⚠️  vLLM test failed"
 
 echo ""
-echo "   Testing LiteLLM (port 4000)..."
-curl -s http://localhost:4000/v1/models \
-  -H "Authorization: Bearer sk-litellm-c9be6c31b9f1ebd5bc5a316ac7d71381" | jq -r '.data[].id' || echo "   ⚠️  LiteLLM test failed"
-
-echo ""
-echo "   Testing tool calling through LiteLLM..."
-RESPONSE=$(curl -s http://localhost:4000/v1/chat/completions \
+echo "   Testing tool calling..."
+RESPONSE=$(curl -s http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-litellm-c9be6c31b9f1ebd5bc5a316ac7d71381" \
+  -H "Authorization: Bearer sk-vllm-c9be6c31b9f1ebd5bc5a316ac7d71381" \
   -d '{
-    "model": "qwen3-coder-30b",
+    "model": "google/gemma-3-27b-it",
     "messages": [{"role": "user", "content": "What is the weather in Paris? Use the get_weather tool."}],
     "tools": [{
       "type": "function",
@@ -115,12 +81,16 @@ else
 fi
 
 echo ""
-echo "=================================================================="
-echo "✅ Configuration update complete!"
+echo "=========================================================="
+echo "✅ Gemma3-27B deployment complete!"
 echo ""
 echo "Architecture:"
-echo "  Continue.dev → LiteLLM (port 4000) → vLLM (port 8000) → Qwen3-Coder-30B"
-echo "                 ↑                      ↑"
-echo "                 Format normalization   qwen3_coder parser"
+echo "  Continue.dev → vLLM (port 8000) → Gemma3-27B"
+echo "                          ↑"
+echo "                   OpenAI tool parser (native)"
 echo ""
-echo "Next: Update Continue.dev config and restart the extension"
+echo "Model: google/gemma-3-27b-it"
+echo "Context: 128K tokens"
+echo "Tool Calling: Native OpenAI format"
+echo ""
+echo "Next: Select 'RunPod Gemma3-27B' in Continue.dev"
