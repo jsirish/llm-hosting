@@ -16,13 +16,19 @@ echo "1️⃣ Updating LiteLLM configuration..."
 echo ""
 echo "2️⃣ Restarting vLLM server with qwen3_coder parser..."
 echo "   Stopping current vLLM server..."
-pkill -f "python -m vllm.entrypoints.openai.api_server" || echo "   No vLLM process found"
-sleep 2
+
+# Try to use the stop script if it exists, otherwise use pkill
+if [ -f "./scripts/stop-server.sh" ]; then
+    ./scripts/stop-server.sh 2>/dev/null || true
+else
+    pkill -f "vllm.entrypoints.openai.api_server" || true
+    pkill -f "vllm serve" || true
+fi
+sleep 3
 
 echo "   Starting vLLM with qwen3_coder parser..."
-./models/qwen.sh &
-VLLM_PID=$!
-echo "   vLLM started (PID: $VLLM_PID)"
+./models/qwen.sh
+echo "   ✅ vLLM restart initiated"
 
 # Wait for vLLM to be ready
 echo "   Waiting for vLLM to initialize..."
