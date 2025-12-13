@@ -31,5 +31,6 @@ echo "GPU Memory: ${VLLM_GPU_MEMORY_UTIL} (maximized)"
 echo "Tool Parser: ${VLLM_TOOL_PARSER}"
 echo ""
 
-# Launch the generic server
-exec ../scripts/start-vllm-server.sh
+# Launch the generic server (use absolute path on RunPod)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "${SCRIPT_DIR}/../scripts/start-vllm-server.sh"

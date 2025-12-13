@@ -48,5 +48,6 @@ echo "⏳ Loading model (this takes 3-5 minutes)..."
 echo "   You can monitor progress with: tail -f $LOG_FILE"
 echo ""
 
-# Start vLLM server
-./start-vllm-server.sh 2>&1 | tee "$LOG_FILE"
+# Start vLLM server (use absolute path on RunPod)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"${SCRIPT_DIR}/../scripts/start-vllm-server.sh" 2>&1 | tee "$LOG_FILE"

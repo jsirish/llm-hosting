@@ -36,4 +36,5 @@ echo "Tool Parser: ${VLLM_TOOL_PARSER} (standard OpenAI format)"
 echo ""
 
 # Launch the generic server
-exec ../scripts/start-vllm-server.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "${SCRIPT_DIR}/../scripts/start-vllm-server.sh"
