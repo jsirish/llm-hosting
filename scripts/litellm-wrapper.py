@@ -15,10 +15,10 @@ LITELLM_URL = "http://localhost:4000"
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def proxy(path: str, request: Request):
     """Proxy all requests to LiteLLM, forcing stream=false for /v1/chat/completions"""
-    
+
     # Read request body
     body = await request.body()
-    
+
     # For chat completions, force stream=false
     if path == "v1/chat/completions" and body:
         try:
@@ -28,7 +28,7 @@ async def proxy(path: str, request: Request):
             body = json.dumps(data).encode()
         except:
             pass
-    
+
     # Forward request to LiteLLM
     async with httpx.AsyncClient() as client:
         response = await client.request(
@@ -38,7 +38,7 @@ async def proxy(path: str, request: Request):
             content=body,
             params=request.query_params,
         )
-        
+
         return Response(
             content=response.content,
             status_code=response.status_code,
