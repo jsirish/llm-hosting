@@ -137,6 +137,29 @@ When you edit pod settings (like storage) or the pod resets, you need to reinsta
 - ❌ Running processes
 - ❌ Files in `/root` or `/tmp`
 
+## Model Options
+
+### ✅ Qwen3-Coder-30B (Current - STABLE)
+```bash
+./qwen.sh
+```
+- **Status**: Production ready, working perfectly on RTX 6000 Ada
+- **Context**: 128K tokens
+- **VRAM**: ~30 GB (FP8 quantization)
+- **Best for**: Coding tasks, stable production use
+
+### ⚠️ GPT-OSS-20B (EXPERIMENTAL - Ada Lovelace support in progress)
+```bash
+./gptoss.sh
+```
+- **Status**: Ada Lovelace support under active development by vLLM team
+- **Requirements**: vLLM >= 0.10.2, PyTorch with +cu128 suffix, CUDA >= 12.8
+- **Context**: 32K tokens (conservative)
+- **Note**: May fail or be unstable until Ada Lovelace officially supported
+- **See**: `docs/setup/GPT-OSS-VLLM-OFFICIAL-GUIDE.md` for details
+
+**Recommendation**: Use Qwen3-Coder-30B for stable production. Monitor vLLM releases for GPT-OSS Ada Lovelace support.
+
 ## Current Status
 ✅ Storage upgraded to 100GB
 ✅ Server running with Qwen3-Coder-30B-FP8
@@ -144,3 +167,4 @@ When you edit pod settings (like storage) or the pod resets, you need to reinsta
 ✅ OpenAI-compatible API ready
 ✅ 128K context window enabled
 ✅ FP8 quantization for efficiency
+⚠️ GPT-OSS-20B experimental on RTX 6000 Ada (Ada Lovelace support in progress)
