@@ -12,14 +12,14 @@ echo ""
 echo "1️⃣ Updating LiteLLM configuration..."
 ./scripts/setup-litellm-proxy.sh
 
-# Step 2: Restart vLLM with qwen_coder parser
+# Step 2: Restart vLLM with qwen3_coder parser
 echo ""
-echo "2️⃣ Restarting vLLM server with qwen_coder parser..."
+echo "2️⃣ Restarting vLLM server with qwen3_coder parser..."
 echo "   Stopping current vLLM server..."
 pkill -f "python -m vllm.entrypoints.openai.api_server" || echo "   No vLLM process found"
 sleep 2
 
-echo "   Starting vLLM with qwen_coder parser..."
+echo "   Starting vLLM with qwen3_coder parser..."
 ./models/qwen.sh &
 VLLM_PID=$!
 echo "   vLLM started (PID: $VLLM_PID)"
@@ -115,6 +115,6 @@ echo ""
 echo "Architecture:"
 echo "  Continue.dev → LiteLLM (port 4000) → vLLM (port 8000) → Qwen3-Coder-30B"
 echo "                 ↑                      ↑"
-echo "                 Format normalization   qwen_coder parser"
+echo "                 Format normalization   qwen3_coder parser"
 echo ""
 echo "Next: Update Continue.dev config and restart the extension"

@@ -22,7 +22,7 @@
 
 ### vLLM Role: Model Serving + Tool Parser
 - Serves models via OpenAI-compatible API
-- Provides built-in tool call parsers (including `qwen_coder`)
+- Provides built-in tool call parsers (including `qwen3_coder`)
 - Handles model-specific XML/JSON formatting before API response
 - Configured via environment variables and CLI flags
 
@@ -39,7 +39,7 @@ Continue.dev (IDE Extension)
 LiteLLM Proxy (Port 4000)
     ↓ Format normalization & parameter cleanup
 vLLM Server (Port 8000)
-    ↓ qwen_coder parser (XML → JSON)
+    ↓ qwen3_coder parser (XML → JSON)
 Qwen3-Coder-30B Model
     ↓ Generates XML tool calls
 ```
@@ -67,18 +67,18 @@ vllm serve <model> \
 
 **Key Flags:**
 - `--enable-auto-tool-choice`: Enables automatic tool selection
-- `--tool-call-parser <parser>`: Specifies parser (e.g., `llama3_json`, `qwen_coder`)
+- `--tool-call-parser <parser>`: Specifies parser (e.g., `llama3_json`, `qwen3_coder`)
 - `--chat-template`: Optional custom chat template
 
 #### 3. Environment Variable Configuration
 From our implementation:
 ```bash
-export VLLM_TOOL_PARSER="qwen_coder"
+export VLLM_TOOL_PARSER="qwen3_coder"
 ```
 
 #### 4. Tool Parser Plugin Structure
 vLLM supports:
-- Built-in parsers: `llama3_json`, `hermes`, `qwen_coder`, etc.
+- Built-in parsers: `llama3_json`, `hermes`, `qwen3_coder`, etc.
 - Custom parser plugins via registration system
 - Interleaved thinking with tool calls
 
@@ -248,7 +248,7 @@ model_list:
 
 With vLLM server:
 ```bash
-export VLLM_TOOL_PARSER="qwen_coder"
+export VLLM_TOOL_PARSER="qwen3_coder"
 vllm serve Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8
 ```
 
@@ -344,7 +344,7 @@ Client → LiteLLM (port 4000) → vLLM (port 8000) → Model
 **Configuration:**
 ```bash
 # vLLM
-export VLLM_TOOL_PARSER="qwen_coder"
+export VLLM_TOOL_PARSER="qwen3_coder"
 vllm serve <model>
 
 # LiteLLM
@@ -373,7 +373,7 @@ File: `models/qwen.sh`
 export VLLM_MODEL_NAME="Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"
 export VLLM_MAX_MODEL_LEN=131072
 export VLLM_GPU_MEMORY_UTILIZATION=0.95
-export VLLM_TOOL_PARSER="qwen_coder"  # CRITICAL for XML tool parsing
+export VLLM_TOOL_PARSER="qwen3_coder"  # CRITICAL for XML tool parsing
 export VLLM_API_KEY="sk-vllm-c9be6c31b9f1ebd5bc5a316ac7d71381"
 ```
 
@@ -414,14 +414,14 @@ models:
 
 #### 4. Startup Sequence
 ```bash
-# 1. Start vLLM with qwen_coder parser
+# 1. Start vLLM with qwen3_coder parser
 cd /workspace
 source models/qwen.sh
 vllm serve $VLLM_MODEL_NAME \
   --max-model-len $VLLM_MAX_MODEL_LEN \
   --gpu-memory-utilization $VLLM_GPU_MEMORY_UTILIZATION \
   --api-key $VLLM_API_KEY \
-  --tool-call-parser qwen_coder
+  --tool-call-parser qwen3_coder
 
 # 2. Wait for vLLM to initialize
 sleep 30
@@ -440,12 +440,12 @@ curl http://localhost:4000/v1/models  # LiteLLM
 
 ## Key Findings
 
-### ✅ Confirmed: vLLM Has qwen_coder Parser
+### ✅ Confirmed: vLLM Has qwen3_coder Parser
 From vLLM documentation:
-- Built-in parsers include `qwen_coder` for Qwen models
+- Built-in parsers include `qwen3_coder` for Qwen models
 - Parser handles Qwen's XML tool format: `<tool_call><function=...></function></tool_call>`
 - Parsing happens **before** JSON validation
-- Configured via `--tool-call-parser qwen_coder` or `VLLM_TOOL_PARSER` env var
+- Configured via `--tool-call-parser qwen3_coder` or `VLLM_TOOL_PARSER` env var
 
 ### ✅ Confirmed: LiteLLM Normalizes to OpenAI Format
 From LiteLLM documentation:
@@ -459,7 +459,7 @@ From LiteLLM documentation:
 
 1. **vLLM Stage**: Parse model's native format → JSON
    - Qwen outputs: `<tool_call>...</tool_call>`
-   - vLLM qwen_coder parser converts to intermediate JSON
+   - vLLM qwen3_coder parser converts to intermediate JSON
 
 2. **LiteLLM Stage**: Normalize to OpenAI format
    - Input: vLLM's parsed tool calls
@@ -493,8 +493,8 @@ WARNING: The following fields were present in the request but ignored: {'support
 Based on documentation review:
 
 1. **vLLM must parse before validation**
-   - Set `VLLM_TOOL_PARSER="qwen_coder"` in environment
-   - Or use `--tool-call-parser qwen_coder` CLI flag
+   - Set `VLLM_TOOL_PARSER="qwen3_coder"` in environment
+   - Or use `--tool-call-parser qwen3_coder` CLI flag
 
 2. **LiteLLM normalizes parsed output**
    - Must point to vLLM endpoint: `api_base: http://localhost:8000/v1`
@@ -524,7 +524,7 @@ ssh root@runpod
 # Check vLLM logs for parser initialization
 tail -f /workspace/logs/vllm-server.log | grep -i "tool"
 
-# Expected: Confirmation of qwen_coder parser loading
+# Expected: Confirmation of qwen3_coder parser loading
 ```
 
 ### 3. Test Tool Calling End-to-End
@@ -573,7 +573,7 @@ vllm serve openai/gpt-oss-20b --help | grep tool
 - Benchmark Score: 89.2 (High reputation)
 
 ### Model Support
-- **Qwen Models**: Confirmed support in both vLLM (qwen_coder parser) and LiteLLM (multiple platforms)
+- **Qwen Models**: Confirmed support in both vLLM (qwen3_coder parser) and LiteLLM (multiple platforms)
 - **GPT-OSS**: No specific documentation found, testing required
 
 ---
@@ -592,7 +592,7 @@ vllm serve openai/gpt-oss-20b --help | grep tool
 
 The documentation search **confirms our architecture is correct**:
 
-1. ✅ vLLM has `qwen_coder` parser for Qwen's XML tool format
+1. ✅ vLLM has `qwen3_coder` parser for Qwen's XML tool format
 2. ✅ LiteLLM standardizes tool calls to OpenAI format
 3. ✅ Two-stage processing (vLLM parse → LiteLLM normalize) is the right approach
 4. ✅ Configuration files align with documented patterns

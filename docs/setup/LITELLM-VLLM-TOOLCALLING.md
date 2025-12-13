@@ -8,7 +8,7 @@ Continue.dev (IDE)
 LiteLLM Proxy (Port 4000)
     ↓ Format normalization & parameter cleanup
 vLLM Server (Port 8000)
-    ↓ qwen_coder parser (XML → JSON)
+    ↓ qwen3_coder parser (XML → JSON)
 Qwen3-Coder-30B Model
     ↓ Generates XML tool calls
 ```
@@ -20,7 +20,7 @@ Qwen3-Coder-30B Model
 - **Problem**: vLLM's `_postprocess_messages` validates all tool calls as JSON, causing failures with Qwen's XML output
 
 ### Current Approach (Working)
-1. **vLLM** with `qwen_coder` parser:
+1. **vLLM** with `qwen3_coder` parser:
    - Parses Qwen's XML tool call format (`<tool_call>`, `<function>`, `<parameter>`)
    - Converts to vLLM's internal tool call structure
    - No JSON validation issues because parsing happens BEFORE validation
@@ -35,7 +35,7 @@ Qwen3-Coder-30B Model
 
 ### models/qwen.sh
 ```bash
-export VLLM_TOOL_PARSER="qwen_coder"  # Parse Qwen's XML format
+export VLLM_TOOL_PARSER="qwen3_coder"  # Parse Qwen's XML format
 ```
 
 ### scripts/setup-litellm-proxy.sh
@@ -44,7 +44,7 @@ model_list:
   - model_name: qwen3-coder-30b
     litellm_params:
       model: openai/Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8
-      api_base: http://localhost:8000/v1  # vLLM with qwen_coder parser
+      api_base: http://localhost:8000/v1  # vLLM with qwen3_coder parser
       supports_function_calling: true
       supports_parallel_function_calling: true
 ```
@@ -153,12 +153,12 @@ curl https://3clxt008hl0a3a-4000.proxy.runpod.net/v1/chat/completions \
 ## Troubleshooting
 
 ### Issue: Still getting XML in response
-**Cause**: vLLM's qwen_coder parser not active
+**Cause**: vLLM's qwen3_coder parser not active
 **Fix**:
 ```bash
 # Check vLLM startup
 ps aux | grep vllm
-# Should show: --tool-call-parser qwen_coder
+# Should show: --tool-call-parser qwen3_coder
 
 # Restart vLLM
 pkill -f vllm
@@ -185,7 +185,7 @@ pkill -f vllm
 ### vLLM Logs
 ```bash
 journalctl -u vllm-server -f
-# Look for: "Tool parser: qwen_coder"
+# Look for: "Tool parser: qwen3_coder"
 ```
 
 ### LiteLLM Logs
@@ -201,7 +201,7 @@ Check VS Code Developer Tools Console for API calls
 
 | Aspect | Previous | Current |
 |--------|----------|---------|
-| vLLM Parser | None/various | `qwen_coder` |
+| vLLM Parser | None/various | `qwen3_coder` |
 | LiteLLM Role | Full tool handling | Format normalization only |
 | Tool Format Flow | XML → Failure | XML → vLLM parser → JSON → LiteLLM → OpenAI format |
 | Validation Point | Before parsing (failed) | After parsing (works) |

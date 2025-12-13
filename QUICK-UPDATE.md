@@ -1,9 +1,9 @@
-# Quick Update - Enable vLLM qwen_coder Parser
+# Quick Update - Enable vLLM qwen3_coder Parser
 
 ## TL;DR
 
 **Problem**: LiteLLM alone can't parse Qwen's XML tool calls
-**Solution**: Enable vLLM's `qwen_coder` parser + LiteLLM for normalization
+**Solution**: Enable vLLM's `qwen3_coder` parser + LiteLLM for normalization
 
 ## Run This on RunPod
 
@@ -12,9 +12,9 @@
 pkill -f vllm
 kill $(cat /workspace/logs/litellm-proxy.pid)
 
-# 2. Update vLLM to use qwen_coder parser
+# 2. Update vLLM to use qwen3_coder parser
 # Edit models/qwen.sh:
-export VLLM_TOOL_PARSER="qwen_coder"
+export VLLM_TOOL_PARSER="qwen3_coder"
 
 # 3. Recreate LiteLLM config
 ./scripts/setup-litellm-proxy.sh
@@ -60,7 +60,7 @@ Continue.dev
   ↓ (OpenAI format)
 LiteLLM (4000)
   ↓ (normalizes params)
-vLLM (8000) + qwen_coder parser
+vLLM (8000) + qwen3_coder parser
   ↓ (parses XML → JSON)
 Model generates XML
 ```
@@ -69,7 +69,7 @@ Model generates XML
 
 | Component | Before | After |
 |-----------|--------|-------|
-| vLLM | No parser (`""`) | `qwen_coder` parser |
+| vLLM | No parser (`""`) | `qwen3_coder` parser |
 | LiteLLM | Try to handle everything | Just normalize format |
 | Tool Format | XML → Fail | XML → vLLM parse → JSON → LiteLLM normalize |
 
