@@ -54,7 +54,7 @@ Each model script sets:
 
 ### 📊 Maximized Context Windows
 Both models configured for **128K tokens** (131,072):
-- **Qwen3-Coder-30B**: 128K context with `qwen3_coder` parser
+- **Qwen3-Coder-30B**: 128K context with `qwen3_xml` parser (XML format avoids JSON escape issues)
 - **GPT-OSS-20B**: 128K context with `openai` parser
 
 ### 🔐 API Key Management

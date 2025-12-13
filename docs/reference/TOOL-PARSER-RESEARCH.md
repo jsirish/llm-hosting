@@ -43,15 +43,26 @@ If GPT-OSS were obtainable, the most likely parsers to use would be:
 
 ---
 
-## Qwen3-Coder Success
+## Qwen3-Coder Parser Evolution
 
-✅ **`qwen3_coder` parser works perfectly**
-- Dedicated parser specifically for Qwen3-Coder models
-- Outputs proper JSON function calls
-- Compatible with GitHub Copilot's tool calling expectations
-- Two variants available:
-  - `qwen3_coder` - For Qwen3-Coder models (our choice)
-  - `qwen3_xml` - Alternative XML-based format
+### ✅ Current: `qwen3_xml` (Recommended)
+- Uses XML format (avoids JSON escape character issues)
+- Dedicated parser for Qwen3-Coder models
+- Compatible with Continue.dev tool calling
+- Handles code with backslashes and special characters reliably
+
+### Previous Attempts
+1. ❌ `qwen3_coder` - Initial success but had JSON escape issues
+   - Worked initially with basic tool calls
+   - Failed with responses containing backslashes (e.g., regex, file paths)
+   - Error: `400 Invalid \escape: line 1 column 2271`
+2. ❌ `openai` - Incompatible (requires token IDs)
+   - Error: `OpenAIToolParser requires token IDs and does not support text-based extraction`
+   - Returned 500 errors
+3. ✅ `qwen3_xml` - **Current solution**
+   - XML format naturally handles backslashes
+   - No JSON parsing errors
+   - Stable for all response types
 
 ---
 
@@ -61,7 +72,9 @@ If GPT-OSS were obtainable, the most likely parsers to use would be:
 1. ❌ `hermes` - Generated XML format instead of JSON (`<function=...>`)
 2. ❌ `default` - Not a valid parser (KeyError)
 3. ❌ `internlm` - Tried briefly
-4. ✅ `qwen3_coder` - SUCCESS! Proper JSON tool calls
+4. ⚠️ `qwen3_coder` - Worked initially, but had escape character issues
+5. ❌ `openai` - Requires token IDs (incompatible)
+6. ✅ `qwen3_xml` - CURRENT! XML format avoids escape issues
 
 ### Key Learning
 **Always use the model-specific parser when available!**
