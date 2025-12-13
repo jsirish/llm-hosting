@@ -112,13 +112,37 @@ llm-hosting/
 
 ### Models
 
-- **GPT-OSS-20B**: OpenAI's open-source model with native tool calling1. **Open Web Terminal**:
-
-- **Qwen 3 Coder 30B**: Specialized for code generation   - Click: https://v5brcrgoclcp1p-19123.proxy.runpod.net/b6472jb6g7sa0bdoxdie9l6jrcen530q/
-
+- **GPT-OSS-20B**: OpenAI's open-source model with native tool calling
+  - ⚠️ **Note:** Ada Lovelace (RTX 6000 Ada) support is IN PROGRESS
+  - Requires vLLM >= 0.10.2, PyTorch with +cu128 suffix, CUDA >= 12.8
+  - See: `docs/setup/GPT-OSS-VLLM-OFFICIAL-GUIDE.md` for details
+- **Qwen 3 Coder 30B**: Specialized for code generation (✅ **STABLE on Ada Lovelace**)
 - **Gemma 3 27B**: Google's efficient instruction model
+- All models support 128K context with FP8/MXFP4 quantization
 
-- All models support 128K context with FP8/MXFP4 quantization2. **Follow the guide in `RUNPOD-DEPLOYED.md`**:
+### ⚠️ GPT-OSS Ada Lovelace Status
+
+**Current Status:** Ada Lovelace (RTX 6000 Ada) support is **under active development** by vLLM team.
+
+**What This Means:**
+- Deployment on RTX 6000 Ada may fail or be unstable
+- vLLM team is "actively working" on Ada Lovelace support
+- No ETA provided for production readiness
+- **Recommended:** Use Qwen3-Coder-30B as stable alternative (working now)
+
+**Version Requirements:**
+- vLLM >= 0.10.2 (for `--tool-call-parser openai` flag)
+- PyTorch with `+cu128` suffix
+- CUDA >= 12.8
+
+**See:** `docs/setup/GPT-OSS-VLLM-OFFICIAL-GUIDE.md` for full details and deployment instructions.
+
+### Start a Model
+
+1. **Open Web Terminal**:
+   - Click: https://v5brcrgoclcp1p-19123.proxy.runpod.net/b6472jb6g7sa0bdoxdie9l6jrcen530q/
+
+2. **Follow the guide in `RUNPOD-DEPLOYED.md`**:
 
    - Verify GPU with `nvidia-smi`
 
@@ -154,11 +178,15 @@ llm-hosting/
 
 ### Setup Guides
 
-- [Continue.dev Setup](docs/setup/CONTINUE-SETUP.md) - VS Code extension configuration### ✅ DEPLOYED: RunPod RTX 6000 Ada - $0.78/hr
+- [GPT-OSS Official vLLM Guide](docs/setup/GPT-OSS-VLLM-OFFICIAL-GUIDE.md) - ⚠️ **Ada Lovelace status & version requirements**
+- [Continue.dev Setup](docs/setup/CONTINUE-SETUP.md) - VS Code extension configuration
+- [RunPod Deployment](docs/setup/RUNPOD-DEPLOYMENT-GUIDE.md) - Cloud GPU setup
+- [API Configuration](docs/reference/API-KEY-GUIDE.md) - Authentication setup
 
-- [RunPod Deployment](docs/setup/RUNPOD-DEPLOYMENT-GUIDE.md) - Cloud GPU setup- **Status:** Active and running now
+### ✅ DEPLOYED: RunPod RTX 6000 Ada - $0.78/hr
 
-- [API Configuration](docs/reference/API-KEY-GUIDE.md) - Authentication setup- **VRAM:** 48 GB (3x more headroom!)
+- **Status:** Active and running now
+- **VRAM:** 48 GB (3x more headroom!)
 
 - **Availability:** Immediate
 
