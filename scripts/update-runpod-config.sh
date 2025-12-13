@@ -21,8 +21,8 @@ fi
 sleep 3
 
 echo ""
-echo "2️⃣ Starting Gemma3-27B with native OpenAI tool calling..."
-./models/gemma3.sh
+echo "2️⃣ Starting GPT-OSS-20B with Continue.dev system message tools..."
+./models/gptoss.sh
 echo "   ✅ vLLM restart initiated"
 
 # Wait for vLLM to be ready
@@ -82,15 +82,15 @@ fi
 
 echo ""
 echo "=========================================================="
-echo "✅ Gemma3-27B deployment complete!"
+echo "✅ GPT-OSS-20B deployment complete!"
 echo ""
 echo "Architecture:"
-echo "  Continue.dev → vLLM (port 8000) → Gemma3-27B"
+echo "  Continue.dev → vLLM (port 8000) → GPT-OSS-20B"
 echo "                          ↑"
-echo "                   OpenAI tool parser (native)"
+echo "                   No parser - Continue.dev handles tools"
 echo ""
-echo "Model: google/gemma-3-27b-it"
+echo "Model: openai/gpt-oss-20b"
 echo "Context: 128K tokens"
-echo "Tool Calling: Native OpenAI format"
+echo "Tool Calling: Continue.dev system message tools"
 echo ""
-echo "Next: Select 'RunPod Gemma3-27B' in Continue.dev"
+echo "Next: Select 'RunPod GPT-OSS-20B' in Continue.dev"

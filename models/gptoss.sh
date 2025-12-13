@@ -11,7 +11,7 @@ export VLLM_MODEL_DESCRIPTION="GPT-OSS-20B (OpenAI Open Source)"
 export VLLM_SERVED_MODEL_NAME="openai/gpt-oss-20b"  # Serve under this name (can add aliases)
 export VLLM_MAX_MODEL_LEN=131072     # 128K tokens (maximized)
 export VLLM_GPU_MEMORY_UTIL=0.95     # Maximum GPU memory utilization
-export VLLM_TOOL_PARSER="openai"
+export VLLM_TOOL_PARSER=""           # NO PARSER - Let Continue.dev handle via system messages
 export VLLM_QUANTIZATION=""          # Let vLLM auto-detect (or set to "fp8", "awq", etc.)
 
 # Performance optimizations (Harmony chat template auto-detected from model)
