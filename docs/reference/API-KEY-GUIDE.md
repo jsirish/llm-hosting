@@ -16,12 +16,28 @@ With an API key:
 
 ## How It Works
 
-The updated `start-server.sh` script now:
+The `start-vllm-server.sh` script:
 
-1. **Generates a secure random API key** (or uses your custom one)
+1. **Uses `$VLLM_API_KEY` environment variable** if set, otherwise generates random key
 2. **Saves it to** `/workspace/logs/api-key.txt`
 3. **Starts vLLM with** `--api-key` parameter
 4. **Displays the key** when server starts
+
+### Setting a Reusable API Key
+
+To use the same API key across server restarts:
+
+**Option 1 - Permanent (recommended):**
+```bash
+echo 'export VLLM_API_KEY="sk-vllm-your-key-here"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**Option 2 - Per-session:**
+```bash
+export VLLM_API_KEY="sk-vllm-your-key-here"
+./models/qwen.sh  # Will use your custom key
+```
 
 All API requests must include:
 ```
