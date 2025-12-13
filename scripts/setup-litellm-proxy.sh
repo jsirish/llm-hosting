@@ -30,19 +30,12 @@ model_list:
 litellm_settings:
   drop_params: true  # Strip non-standard parameters
   json_logs: false  # Easier to read logs
-  num_retries: 2
+  num_retries: 0  # Disable retries that might cause issues
   request_timeout: 600
   modify_params: true
-  success_callback: []
 
 general_settings:
   master_key: sk-litellm-c9be6c31b9f1ebd5bc5a316ac7d71381  # Same key for simplicity
-
-# Router settings for load balancing (future)
-router_settings:
-  routing_strategy: simple-shuffle
-  model_group_alias:
-    qwen: qwen3-coder-30b
 EOF
 
 echo "✅ LiteLLM config created at /workspace/litellm-config.yaml"
