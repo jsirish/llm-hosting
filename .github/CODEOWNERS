@@ -1,0 +1,15 @@
+# Code Owners for llm-hosting
+# These owners will be requested for review when someone opens a pull request
+
+# Default owner for everything
+* @jsirish
+
+# Model scripts require extra scrutiny (secrets, parameters)
+/models/ @jsirish
+
+# Scripts that affect server startup
+/scripts/start-vllm-server.sh @jsirish
+/scripts/stop-server.sh @jsirish
+
+# Documentation can be reviewed by Copilot
+/docs/ @copilot
