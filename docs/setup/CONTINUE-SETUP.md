@@ -249,7 +249,8 @@ curl https://3clxt008hl0a3a-8001.proxy.runpod.net/v1/completions \
 From your existing scripts:
 
 - **Gemma**: `VLLM_TOOL_PARSER="openai"`
-- **Qwen**: `VLLM_TOOL_PARSER="qwen"`
+- **Qwen3**: `VLLM_TOOL_PARSER="qwen3_xml"` (XML format avoids JSON escape issues)
+  - Alternative: `"qwen3_coder"` (may have escape character issues with some responses)
 - **DeepSeek/Kimi**: `VLLM_TOOL_PARSER="deepseek"`
 
 ---

@@ -11,7 +11,7 @@ if [ -z "${VLLM_MODEL}" ]; then
     echo "Example:"
     echo "  export VLLM_MODEL=\"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\""
     echo "  export VLLM_MAX_MODEL_LEN=32768"
-    echo "  export VLLM_TOOL_PARSER=\"qwen3_coder\""
+    echo "  export VLLM_TOOL_PARSER=\"qwen3_xml\"  # For Qwen3 models"
     echo "  ./start-vllm-server.sh"
     echo ""
     echo "Or use a model-specific script:"
